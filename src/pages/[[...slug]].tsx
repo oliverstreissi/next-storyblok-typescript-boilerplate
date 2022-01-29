@@ -17,7 +17,7 @@ export interface SBParams {
 }
 
 const Page: NextPage<PageProps> = ({ story, preview }) => {
-  const enableBridge = true; // load the storyblok bridge everywhere
+  const enableBridge = preview; // load the storyblok bridge everywhere
   // const enableBridge = preview; // enable bridge only in prevew mode
   story = useStoryblok(story, enableBridge);
 
@@ -46,7 +46,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   let sbParams: SBParams = {
     // change to `published` to load the published version
-    version: 'draft', // or published
+    version: 'published', // or draft
   };
 
   if (preview) {
