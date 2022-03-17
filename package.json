@@ -1,5 +1,5 @@
 {
-  "name": "schilling-fuer-schilling",
+  "name": "your-project-name",
   "private": true,
   "scripts": {
     "dev": "next dev",
