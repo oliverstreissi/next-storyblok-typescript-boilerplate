@@ -1,12 +1,12 @@
+import { SbBlokData, storyblokEditable } from '@storyblok/react';
 import { FunctionComponent } from 'react';
-import { FeatureComponent } from 'src/models/sb-feature.model';
 
-export interface FeatureProps {
-  blok: FeatureComponent;
+export interface IFeatureComponent extends SbBlokData {
+  name: string;
 }
 
-const Feature: FunctionComponent<FeatureProps> = ({ blok }) => {
-  return <div>{blok.name}</div>;
+const Feature: FunctionComponent<{ blok: IFeatureComponent }> = ({ blok }) => {
+  return <div {...storyblokEditable(blok)}>{blok.name}</div>;
 };
 
 export default Feature;

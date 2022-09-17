@@ -1,12 +1,14 @@
+import { SbBlokData, storyblokEditable } from '@storyblok/react';
 import { FunctionComponent } from 'react';
-import { TeaserComponent } from 'src/models/sb-teaser.model';
 
-export interface TeaserProps {
-  blok: TeaserComponent;
+export interface ITeaserComponent extends SbBlokData {
+  headline: string;
 }
 
-const Teaser: FunctionComponent<TeaserProps> = ({ blok }) => {
-  return <h2>{blok.headline}</h2>;
+const Teaser: FunctionComponent<{
+  blok: ITeaserComponent;
+}> = ({ blok }) => {
+  return <h2 {...storyblokEditable(blok)}>{blok.headline}</h2>;
 };
 
 export default Teaser;

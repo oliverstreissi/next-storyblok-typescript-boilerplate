@@ -1,19 +1,16 @@
-import DynamicComponent from '../dynamic-component';
+import { SbBlokData, StoryblokComponent } from '@storyblok/react';
 import { FunctionComponent } from 'react';
-import { PageComponent } from '../../models/sb-page.model';
 
-interface PageProps {
-  blok: PageComponent;
+export interface IPageComponent extends SbBlokData {
+  body: SbBlokData[];
 }
 
-const Page: FunctionComponent<PageProps> = ({ blok }) => {
+const Page: FunctionComponent<{ blok: IPageComponent }> = ({ blok }) => {
   return (
     <main className="container flex justify-center">
-      {blok.body
-        ? blok.body.map((blok) => (
-            <DynamicComponent blok={blok} key={blok._uid} />
-          ))
-        : null}
+      {blok.body.map((nestedBlok) => (
+        <StoryblokComponent blok={nestedBlok} key={nestedBlok._uid} />
+      ))}
     </main>
   );
 };

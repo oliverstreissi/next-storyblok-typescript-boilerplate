@@ -1,16 +1,22 @@
 import { FunctionComponent } from 'react';
-import DynamicComponent from '@components/dynamic-component';
-import { GridComponent } from 'src/models/sb-grid.model';
+import {
+  SbBlokData,
+  StoryblokComponent,
+  storyblokEditable,
+} from '@storyblok/react';
 
-export interface GridProps {
-  blok: GridComponent;
+export interface IGridComponent extends SbBlokData {
+  columns: SbBlokData[];
 }
 
-const Grid: FunctionComponent<GridProps> = ({ blok }) => {
+const Grid: FunctionComponent<{ blok: IGridComponent }> = ({ blok }) => {
   return (
-    <div className="flex flex-col items-center justify-center flex-wrap max-w-3xl mt-12">
+    <div
+      className="flex flex-col items-center justify-center flex-wrap max-w-3xl mt-12"
+      {...storyblokEditable(blok)}
+    >
       {blok.columns.map((blok) => (
-        <DynamicComponent blok={blok} key={blok._uid} />
+        <StoryblokComponent blok={blok} key={blok._uid} />
       ))}
     </div>
   );

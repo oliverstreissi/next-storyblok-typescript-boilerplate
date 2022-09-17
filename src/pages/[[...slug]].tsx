@@ -1,10 +1,12 @@
 import React from 'react';
-import DynamicComponent from '@components/dynamic-component';
 import Head from 'next/head';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
-import Storyblok, { useStoryblok } from '../lib/storyblok';
-import { Params } from 'next/dist/server/router';
-import { StoryData } from 'storyblok-js-client';
+import {
+  getStoryblokApi,
+  StoryblokComponent,
+  StoryData,
+  useStoryblokState,
+} from '@storyblok/react';
 
 export interface PageProps {
   story: StoryData;
@@ -17,9 +19,7 @@ export interface SBParams {
 }
 
 const Page: NextPage<PageProps> = ({ story, preview }) => {
-  const enableBridge = preview; // load the storyblok bridge everywhere
-  // const enableBridge = preview; // enable bridge only in prevew mode
-  story = useStoryblok(story, enableBridge);
+  story = useStoryblokState(story, {}, preview);
 
   return (
     <div>
@@ -32,35 +32,33 @@ const Page: NextPage<PageProps> = ({ story, preview }) => {
         <h1>{story ? story.name : 'My Site'}</h1>
       </header>
 
-      <DynamicComponent blok={story.content} />
+      <StoryblokComponent blok={story.content} />
     </div>
   );
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
-  const params = context.params as Params;
-  const preview = context.preview || null;
-
-  // join the slug array used in Next.js catch-all routes
-  let slug = params.slug ? params.slug.join('/') : 'home';
+export const getStaticProps: GetStaticProps = async ({ params, preview }) => {
+  let slug =
+    params && params.slug ? (params.slug as string[]).join('/') : 'home';
 
   let sbParams: SBParams = {
-    // change to `published` to load the published version
-    version: 'published', // or draft
+    version: process.env.STORYBLOK_PREVIEW_TOKEN
+      ? process.env.STORYBLOK_PREVIEW_TOKEN
+      : 'published',
   };
 
   if (preview) {
-    // set the version to draft in the preview mode
     sbParams.version = 'draft';
-    sbParams.cv = Date.now();
   }
 
-  let { data } = await Storyblok.get(`cdn/stories/${slug}`, sbParams);
+  const storyblokApi = getStoryblokApi();
+  let { data } = await storyblokApi.get(`cdn/stories/${slug}`, sbParams);
 
   return {
     props: {
-      story: data ? data.story : null,
-      preview,
+      story: data ? data.story : false,
+      key: data ? data.story.id : false,
+      preview: preview || false,
     },
     revalidate: 3600, // revalidate every hour
   };
@@ -68,7 +66,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   // get all links from Storyblok
-  let { data } = await Storyblok.get('cdn/links/');
+  const storyblokApi = getStoryblokApi();
+  let { data } = await storyblokApi.get('cdn/links/');
 
   let paths: any = [];
   // create a routes for every link
