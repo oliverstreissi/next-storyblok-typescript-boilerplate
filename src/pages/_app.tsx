@@ -4,7 +4,7 @@ import { storyblokInit, apiPlugin } from '@storyblok/react';
 import { components } from '../common/component-mappings';
 
 storyblokInit({
-  accessToken: process.env.STORYBLOK_PREVIEW_TOKEN,
+  accessToken: process.env.STORYBLOK_TOKEN,
   use: [apiPlugin],
   components,
 });

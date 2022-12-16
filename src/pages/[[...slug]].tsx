@@ -10,16 +10,10 @@ import {
 
 export interface PageProps {
   story: StoryData;
-  preview: boolean;
 }
 
-export interface SBParams {
-  version: string;
-  cv?: number;
-}
-
-const Page: NextPage<PageProps> = ({ story, preview }) => {
-  story = useStoryblokState(story, {}, preview);
+const Page: NextPage<PageProps> = ({ story }) => {
+  story = useStoryblokState(story);
 
   return (
     <div>
@@ -37,19 +31,13 @@ const Page: NextPage<PageProps> = ({ story, preview }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ params, preview }) => {
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   let slug =
     params && params.slug ? (params.slug as string[]).join('/') : 'home';
 
-  let sbParams: SBParams = {
-    version: process.env.STORYBLOK_PREVIEW_TOKEN
-      ? process.env.STORYBLOK_PREVIEW_TOKEN
-      : 'published',
+  let sbParams = {
+    version: process.env.STORYBLOK_VERSION || 'published', // 'draft' or 'published'
   };
-
-  if (preview) {
-    sbParams.version = 'draft';
-  }
 
   const storyblokApi = getStoryblokApi();
   let { data } = await storyblokApi.get(`cdn/stories/${slug}`, sbParams);
@@ -58,7 +46,6 @@ export const getStaticProps: GetStaticProps = async ({ params, preview }) => {
     props: {
       story: data ? data.story : false,
       key: data ? data.story.id : false,
-      preview: preview || false,
     },
     revalidate: 3600, // revalidate every hour
   };
@@ -70,7 +57,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
   let { data } = await storyblokApi.get('cdn/links/');
 
   let paths: any = [];
-  // create a routes for every link
+
+  // create a route for every link
   Object.keys(data.links).forEach((linkKey) => {
     // do not create a route for folders
     if (data.links[linkKey].is_folder) {

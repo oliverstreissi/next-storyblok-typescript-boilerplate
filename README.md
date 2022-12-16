@@ -4,18 +4,15 @@ This is a boilerplate for [Next.js](https://nextjs.org/) + [Storyblok](https://w
 
 ### 1. Create a new Storyblok space and add the following settings
 
-- Add https://localhost:3010/ as location (default environment)
-- Add a preview url called "Preview" and copy and paste this url: https://localhost:3010/api/preview?secret=MY_SECRET_TOKEN&slug=
-- Replace 'MY_SECRET_TOKEN' in the url with your own secret.
-- Add a preview url called "Exit Preview" with and copy and paste this url: https://localhost:3010/api/exit-preview?slug=
+- Add `https://localhost:3010/` as location (default environment)
 
 ### 2. Add needed environment variables
 
-Add a .env file in your root folder with the following environment variables and replace the placeholders with your Storyblok token and secret.
+Add a .env file in your root folder with the following environment variables and replace the placeholder with your Storyblok token.
 
 ```
-STORYBLOK_PREVIEW_TOKEN=YOUR_TOKEN
-STORYBLOK_SECRET_TOKEN=YOUR_SECRET
+STORYBLOK_TOKEN=YOUR_TOKEN
+STORYBLOK_VERSION=draft
 ```
 
 ### 3. Install dependencies:
