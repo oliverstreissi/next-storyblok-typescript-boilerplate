@@ -1,36 +1,31 @@
-This is a boilerplate for [Next.js](https://nextjs.org/) + [Storyblok](https://www.storyblok.com/) projects with Typescript and [Tailwind](https://tailwindcss.com/docs/guides/nextjs).
+This is a [Next.js](https://nextjs.org/) with TypeScript, Tailwind and Storyblok as headless CMS.
 
-# Getting Started
+Keep in mind that this boilerplate uses the approach with a client-side wrapper that allows live editing in real time, but don't uses the full potential of React server components!
 
-### 1. Create a new Storyblok space and add the following settings
+## Getting Started
 
-- Add `https://localhost:3010/` as location (default environment)
+First, install dependencies:
 
-### 2. Add needed environment variables
-
-Add a .env file in your root folder with the following environment variables and replace the placeholder with your Storyblok token.
-
-```
-STORYBLOK_TOKEN=YOUR_TOKEN
-STORYBLOK_VERSION=draft
-```
-
-### 3. Install dependencies:
-
-```
+```bash
 npm install
 # or
-yarn install
+yarn
+# or
+pnpm install
 ```
 
-### 4. Follow the tutorial from Storyblok to set up your dev server with HTTPS proxy
-
-https://www.storyblok.com/faq/setup-dev-server-https-proxy
-
-### 5. Run the development server:
+Then run the development server:
 
 ```bash
 npm run dev
 # or
 yarn dev
+# or
+pnpm dev
+```
+
+Add a .env.local file with the following variables:
+
+```
+NEXT_PUBLIC_STORYBLOK_ACCESS_TOKEN=your-storyblok-token
 ```
